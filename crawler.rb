@@ -1,20 +1,18 @@
 require 'open-uri'
 require 'nokogiri'
 
-puts "Insira uma palavra chave: "
-keyword = gets 
+keywords = ['short lady rock branco','vestido justo preto','body cavado','vestido justo','kit ranco','blusinha embuste','camiseta me poupe se poupe nos poupe','KIT 3 VESTIDO BASICO DE ALCINHA','PARKA RASGADA JEANS','CALCA COURO FAKE PRETA','PARKA CAMUFLADA FEMININA','CALCA CAMUFLADA FEMININA','BODY FEMININO RENDA','TOP FEMININO COM BOJO','CAMISETA ANTI EMBUSTE','lady rock','short lady rock','parka feminina','PARKA FEMININA COM CAPUZ','CAMISETA ME POUPE','SAIA VINIL PRETA','BODY FEMININO RENDA','BLUSA RANCO','VESTIDO MANGA COMPRIDA JUSTO','BLUSA PLENA','VESTIDO OMBRO A OMBRO PRETO','VESTIDO CINZA JUSTO','VESTIDO JUSTO PRETO CURTO','VESTIDO TUBINHO BORDO']
 
-#Insert Keyword to Google
-html = open "https://www.google.com.br/search?q=#{keyword}&num=100"
+keywords.each do |keyword|
+  page = open "http://www.google.com/search?num=100&q=#{keyword}"
+  html = Nokogiri::HTML page
 
-doc = Nokogiri::HTML(html)
+  i = 1
 
-i = 1
-
-doc.css('cite').each do |d|
-  #Insert you site
-  if /www.purchasestore.com.br/ === d.content 
-    puts "#{i} - " + d.content 
-  end  
-  i += 1
-end	
+  html.search("cite").each do |cite|
+    if /purchasestore.com.br/ === cite.inner_text
+      puts "#{i} - #{keyword} - " + cite.inner_text 
+    end
+    i += 1
+  end
+end  
